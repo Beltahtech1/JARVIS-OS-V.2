@@ -2,6 +2,7 @@ import time
 import subprocess
 import platform
 import shutil
+import re
 
 try:
     import psutil
@@ -66,16 +67,21 @@ _APP_ALIASES: dict[str, dict[str, str]] = {
 
 
 def _normalize(raw: str) -> str:
-    key = raw.lower().strip()
+    key = re.sub(r"^(?:please\s+)?(?:open|start|launch|run)\s+(?:up\s+)?", "", raw.strip(), flags=re.I)
+    key = re.sub(r"\b(?:please|for\s+me)\b", "", key, flags=re.I).strip()
+    key = re.sub(r"\s+", " ", key)
 
-    if key in _APP_ALIASES:
-        return _APP_ALIASES[key].get(_SYSTEM, raw)
+    lookup = key.lower()
+    if lookup == "google chrome":
+        return key
+    if lookup in _APP_ALIASES:
+        return _APP_ALIASES[lookup].get(_SYSTEM, key)
 
     for alias_key, os_map in _APP_ALIASES.items():
-        if alias_key in key or key in alias_key:
-            return os_map.get(_SYSTEM, raw)
+        if alias_key in lookup:
+            return os_map.get(_SYSTEM, key)
 
-    return raw  
+    return key  
 
 def _launch_windows(app_name: str) -> bool:
 

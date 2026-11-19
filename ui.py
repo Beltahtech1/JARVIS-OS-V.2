@@ -42,6 +42,7 @@ CONFIG_DIR = BASE_DIR / "config"
 API_FILE   = CONFIG_DIR / "api_keys.json"
 FONT_DIR   = BASE_DIR / "assets" / "fonts"
 UI_SETTINGS_FILE = Path.home() / ".jarvis" / "config" / "settings.json"
+LAYOUT_SETTINGS_FILE = Path.home() / ".jarvis" / "config" / "layout.json"
 
 # Each profile changes both cadence and rendering density.  Keeping this data
 # centralized makes the Settings UI, the renderer, and JARVIS voice commands
